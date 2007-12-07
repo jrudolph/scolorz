@@ -37,33 +37,52 @@ class Turtle (x0:float,y0:float){
         def push:Turtle = new Turtle(this)
 }
 
-def kugeln = 
-List.range(0,30).map (i=>{
-        
-        hsb(choice(Array(0.86,0.6,0.1))
-                ,random(0.3,0.9)
-                ,random(0.6,1.)
-                ,0.6)
-        
-        var x = random(0,300)
-        var y = random(0,300)
-        val d = random(30,100)
+def kugeln = {
+def v(w:int) = (w%360.f)/360.f
+val hs:float = random(0,90)
+val colors = Array(hs,hs+180,hs+175,hs+185,hs+5,hs-5).map(v(_))
+//val colors = Array(hs,hs-10,hs-5,hs+10,hs+5).map(v(_))
+List.range(0,30).map (i=>{        
+        //val h = choice(Array(0.86,0.6,0.1))
 
-        oval(x,y,d,d)
-})
+        val h = choice(colors)
+        val s = random(0.3,0.9)
+        val b = random(0.6,1.)
+        
+        var x = random(0,width-100)
+        var y = random(0,height-100)
+        val r = random(15,50)
 
-val t = new Turtle(200,400);
+        val grad = new java.awt.RadialGradientPaint(x+r,y+r,r
+                ,Array(0f,1f)
+                ,Array(hsb(h,s,b,0.9),hsb(h,s,b,0.7)))
+
+        g2d.setPaint(grad)
+
+        oval(x,y,2*r,2*r)
+})}
+
+val t = new Turtle(width/2,height);
 t.rotate(-90)
 
 def baum(depth:int,length:float,t:Turtle):Unit = 
         if (depth > 0 ){
-                hsb(0.6,0.7,0.4,depth.floatValue/8);
+                g2d.setStroke(new java.awt.BasicStroke(depth,1,1));
+
+                hsb(0.6,0.7,0.4,depth.floatValue/10);
                 t.line(length)
-                t.rotate(-30)
-                baum(depth-1,length * 0.8,t.rotate(random(10,30)).push)
-                baum(depth-1,length * 0.8,t.rotate(random(14,30)).push)
+                //t.rotate(-15)
+                val r = (10-depth).floatValue/10f*arg("winkel",0f,360f,70)
+                baum(depth-1,length * arg("krumm",0f,1f,0.9f),t.rotate(random(-r,r)).push)
+                baum(depth-1,length * arg("gerade",0f,1f,0.8f),t.push)
         }        
 
-baum(10,70,t)
+g2d.setPaint(new java.awt.RadialGradientPaint(width/2,height/2,width/2
+        ,Array(0f,1f)
+        ,Array(hsb(0.33,0.1,1,0.2),hsb(0.33,0.1,1,0.8))))
+
+rect(0,0,width,height)
 
 //kugeln
+
+baum(arg("Stufen",0f,10f,10f),arg("Stammlaenge",0f,200f,100f),t)
