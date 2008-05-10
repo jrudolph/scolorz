@@ -15,9 +15,7 @@ public abstract class Painter {
 	}
 
 	Random rand;
-	/*public void setRandom(Random r) {
-		rand = r;
-	}*/
+
 	protected float random(double low,double high){
 		return (float) (low + (high - low) * random());
 	}
@@ -25,10 +23,13 @@ public abstract class Painter {
 		return rand.nextDouble();
 	}
 	Color fromHSB(float h,float s,float b,float a){
+		assert h <= 1.0f : String.format("Hue: %d > 1.0", h);
+		assert s <= 1.0f : String.format("Saturation: %d > 1.0", s);
+		assert b <= 1.0f : String.format("Brightness: %d > 1.0", b);
+		assert a <= 1.0f : String.format("Alpha: %d > 1.0", a);
+
 		int rgb = Color.HSBtoRGB(h,s,b);
-		Color c = new Color(rgb);
-		float[] comps = c.getColorComponents(null);
-		return new Color(comps[0],comps[1],comps[2],a);
+		return new Color((rgb&0xffffff) | ((int)(a*255))<<24,true);
 	}
 	protected Painter(){
 		hints = new HashMap<RenderingHints.Key,Object>();
@@ -37,7 +38,7 @@ public abstract class Painter {
 
 	protected abstract void paint();
 	protected Graphics2D g2d;
-	private Map<RenderingHints.Key,Object> hints;
+	private final Map<RenderingHints.Key,Object> hints;
 
 	public int height;
 	public int width;
