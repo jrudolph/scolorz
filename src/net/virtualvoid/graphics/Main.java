@@ -31,6 +31,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +59,12 @@ import scala.tools.nsc.Settings;
 
 
 public class Main{
+	private static final String EXAMPLE_SCRIPT = "Tree.script";
+
+	private static void error(String format,Object...args){
+		System.err.println(String.format(format,args));
+	}
+
 	static interface Model{
 		float value();
 	}
@@ -70,7 +81,7 @@ public class Main{
 		});
 		p.setBackground(Color.white);
 
-		p.setSize(600,400);
+		p.setSize(700,700);
 
 		final Interpreter interpreter = new Interpreter(new Settings());
 		final Painter[] painter = new Painter[1];
@@ -139,6 +150,7 @@ public class Main{
 
 		final JTextArea text = new JTextArea();
 		text.setFont(new Font(Font.MONOSPACED,Font.PLAIN,10));
+		text.setText(readWholeFile(EXAMPLE_SCRIPT));
 
 		JScrollPane scrPane = new JScrollPane(text);
 		panel.add(scrPane);
@@ -188,7 +200,7 @@ public class Main{
 		};
 
 		JButton button = new JButton("Execute");
-		button.addMouseListener(new MouseAdapter() {
+		MouseAdapter executeListener = new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				engine[0].clear();
@@ -202,7 +214,8 @@ public class Main{
 
 				c.repaint();
 			}
-		});
+		};
+		button.addMouseListener(executeListener);
 		panel.add(button);
 		JButton button2 = new JButton("New Seed");
 		button2.addMouseListener(new MouseAdapter() {
@@ -226,6 +239,24 @@ public class Main{
 		splitter.setDividerLocation(400);
 
 		p.add(splitter);
+
 		p.setVisible(true);
+
+		executeListener.mouseClicked(null);
+	}
+	private static String readWholeFile(String filename){
+		int length = (int)new File(filename).length();
+		char []buffer = new char[length];
+		try {
+			new InputStreamReader(new FileInputStream(filename)).read(buffer,0,length);
+			return new String(buffer);
+		} catch (FileNotFoundException e) {
+			error("Couldn't find '%s'",filename);
+			return "";
+		} catch (IOException e) {
+			error("Error while reading '%s'",filename);
+			e.printStackTrace();
+			return "";
+		}
 	}
 }
