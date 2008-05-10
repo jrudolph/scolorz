@@ -61,35 +61,6 @@ public class Main{
 		final Painter[] painter = new Painter[1];
 
 		interpreter.bind("painter", "Array[net.virtualvoid.graphics.Painter]", painter);
-		//Object res = interpreter.interpret("val i = blub;");
-
-		/*final Painter paintable = new Painter() {
-			@Override
-			public void paint(Graphics2D g) {
-				Graphics2D g2d=g;
-				Map<RenderingHints.Key,Object> hints=new HashMap<RenderingHints.Key,Object>();
-				hints.put(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-				g2d.addRenderingHints(hints);
-
-				final int COUNT = 20;
-
-				for (int i=0;i<COUNT;i++){
-					float s,b;
-					Color c2 = fromHSB(0.4f, s = random(0.3,1), b = random(0.5,1),0.9f);
-
-					g.setColor(c2);
-
-					int d=(int)random(10,60);
-
-					int x = (int) (200 + Math.cos(2.*Math.PI*i/COUNT)*100);
-					int y = (int) (200 + Math.sin(2.*Math.PI*i/COUNT)*100);
-
-					g.fillOval(x-d/2,y-d/2
-							, d,d);
-				}
-			}
-		};*/
 
 		final long []seed = new long[1];
 		final IEngine[] engine=new IEngine[1];
@@ -115,7 +86,6 @@ public class Main{
 
 		            bufferGraphics.clearRect(0,0,bufferWidth,bufferHeight);
 
-					//painter[0].setRandom(rand);
 					painter[0].paint((Graphics2D) bufferGraphics,rand,bufferWidth,bufferHeight,engine[0]);
 
 					g.drawImage(bufferImage,0,0,this);
