@@ -12,6 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -133,6 +134,8 @@ public class Main{
 		engine[0] = new IEngine() {
 			Map<String,Model> sliders = new HashMap<String, Model>();
 
+			NumberFormat nf = NumberFormat.getNumberInstance();
+
 			public float arg(String name, final float from, final float to, float value) {
 				if (sliders.containsKey(name))
 					return sliders.get(name).value();
@@ -140,18 +143,22 @@ public class Main{
 					final JSlider slider = new JSlider(0,100,(int) ((value-from)/(to-from)*100f));
 					vars.add(new JLabel(name));
 					vars.add(slider);
+					final JLabel text = new JLabel(nf.format(value));
+					vars.add(text);
 					vars.doLayout();
 
-					sliders.put(name,new Model() {
+					final Model model = new Model() {
 						@Override
 						public float value() {
 							return from + slider.getValue() * (to-from)/100;
 						}
-					});
+					};
+					sliders.put(name,model);
 
 					slider.addChangeListener(new ChangeListener() {
 						@Override
 						public void stateChanged(ChangeEvent e) {
+							text.setText(nf.format(model.value()));
 							c.repaint();
 						}
 					});
