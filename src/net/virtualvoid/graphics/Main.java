@@ -54,11 +54,6 @@ import scala.tools.nsc.Settings;
 
 
 public class Main{
-	/*static interface Paintable{
-		void paint(Graphics2D g);
-		void setRandom(Random r);
-	}*/
-
 	static interface Model{
 		float value();
 	}
@@ -198,7 +193,6 @@ public class Main{
 			public void mouseClicked(MouseEvent e) {
 				engine[0].clear();
 
-				//seed[0] = System.nanoTime();
 				String code = "object aPainter extends net.virtualvoid.graphics.Painter{\n"
 						+ "def paint:Unit = {\n"
 						+ text.getText() + "\n}\n"
