@@ -50,6 +50,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -151,12 +152,15 @@ public class Main{
 		final JTextArea text = new JTextArea();
 		text.setFont(new Font(Font.MONOSPACED,Font.PLAIN,10));
 		text.setText(readWholeFile(EXAMPLE_SCRIPT));
+		text.setBorder(new TitledBorder("Code"));
 
 		JScrollPane scrPane = new JScrollPane(text);
 		panel.add(scrPane);
 
 		final JPanel vars = new JPanel();
 		vars.setLayout(new GridLayout(5,2));
+		vars.setBorder(new TitledBorder("Variables"));
+		vars.setMinimumSize(new Dimension(200,300));
 		engine[0] = new IEngine() {
 			Map<String,Model> sliders = new HashMap<String, Model>();
 
