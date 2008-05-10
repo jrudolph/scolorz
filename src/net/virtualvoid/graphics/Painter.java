@@ -3,6 +3,7 @@ package net.virtualvoid.graphics;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.geom.Path2D;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -76,6 +77,9 @@ public abstract class Painter {
 	}
 	protected void rect(int x,int y,int width,int height){
 		g2d.fillRect(x, y, width, height);
+	}
+	protected void path(Path2D path){
+		g2d.draw(path);
 	}
 	protected <T> T choice(T[] ar){
 		return ar[(int)random(0,ar.length)];
