@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/johannes/scala-2.6.0-final/share/scala/lib/scala-compiler.jar"/>
-	<classpathentry kind="lib" path="/home/johannes/scala-2.6.0-final/share/scala/lib/scala-library.jar"/>
+	<classpathentry kind="lib" path="lib/scala-compiler-2.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/scala-library-2.7.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
