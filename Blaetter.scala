@@ -102,7 +102,7 @@ val colorDev = arg("colorDev", 0.05f, 0.4f, 0.1)
 val baseColor = arg("color", 0f, 1f, 0.33f)
 val saturation = arg("saturation", 0f, 1f, 0.8)
 val brightness = arg("brightness", 0f, 1f, 0.8)
-def painter(color: Float) = Array(hsb(color,saturation,brightness,0.8+random(-0.25,0.25)),hsb(color,saturation*0.8,brightness*0.8,0.5))
+def painter(color: Float) = Array(hsb(color,saturation,brightness,0.9+random(-0.25,0.25)),hsb(color,saturation*0.8,brightness*0.8,0.6))
 
 def blatt(w: Float, color: Float, inputT: Turtle) = {
 	hsb(0.33,0.8,0.5, 0.7)
@@ -141,7 +141,7 @@ val t = new Turtle(x,height);
 
 t.rotate(-90)
 
-times(20) {
+times(15) {
   val bl = random(0,1) < 0.12
   if (bl) {
 	val blT = t.push
@@ -153,7 +153,7 @@ times(20) {
   hsb(0.33,0.7,0.4, 1);
   g2d.setStroke(new java.awt.BasicStroke(5,1,1));
 
-  t.line(20f + random(0f,5f))
+  t.line(30f + random(-20f,20f))
   t.rotate(random(-10, 10))
 }
 
