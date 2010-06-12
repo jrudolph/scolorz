@@ -27,6 +27,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -230,6 +232,20 @@ public class Main{
 			}
 		});
 		panel.add(button2);
+		JButton saveButton = new JButton("Save");
+		saveButton.addMouseListener(new MouseAdapter() {
+    		@Override
+			public void mouseClicked(MouseEvent e) {
+			try {
+				BufferedImage i = new BufferedImage(c.getSize().width, c.getSize().height, BufferedImage.TYPE_INT_ARGB);
+				Graphics g = i.getGraphics();
+				c.paint(g);
+				g.dispose();
+				ImageIO.write(i, "png", new File("flower.png"));
+		    } catch(IOException ex) { throw new RuntimeException(ex); }
+			}
+		});
+		panel.add(saveButton);
 
 		panel.add(vars);
 
