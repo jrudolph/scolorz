@@ -26,9 +26,11 @@ import java.awt.geom.Path2D;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public abstract class Painter {
 	static interface IEngine{
+	    Set<Map.Entry<String, Main.Model>> argValues();
 		float arg(String name,float from,float to,float value);
 
 		void clear();

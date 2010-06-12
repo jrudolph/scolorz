@@ -35,23 +35,28 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSlider;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -167,6 +172,10 @@ public class Main{
 			Map<String,Model> sliders = new HashMap<String, Model>();
 
 			NumberFormat nf = NumberFormat.getNumberInstance();
+			
+			public Set<Map.Entry<String, Model>> argValues() {
+			    return sliders.entrySet();
+			}
 
 			public float arg(String name, final float from, final float to, float value) {
 				if (sliders.containsKey(name))
@@ -232,19 +241,39 @@ public class Main{
 			}
 		});
 		panel.add(button2);
+		final JTextField fileName = new JTextField();
 		JButton saveButton = new JButton("Save");
 		saveButton.addMouseListener(new MouseAdapter() {
+		    private File getFile(String ext) {
+    		    return new File("out/"+fileName.getText()+"."+ext);
+		    }
     		@Override
 			public void mouseClicked(MouseEvent e) {
-			try {
-				BufferedImage i = new BufferedImage(c.getSize().width, c.getSize().height, BufferedImage.TYPE_INT_ARGB);
-				Graphics g = i.getGraphics();
-				c.paint(g);
-				g.dispose();
-				ImageIO.write(i, "png", new File("flower.png"));
-		    } catch(IOException ex) { throw new RuntimeException(ex); }
+			    try {
+			        File f = getFile("png");
+			        if (f.exists())
+			            JOptionPane.showMessageDialog(null, "Dieser Dateiname ist schon vorhanden, bitte gib einen anderen Dateinamen an.", "Dateiname schon vergeben", JOptionPane.ERROR_MESSAGE);
+			        else {
+				        BufferedImage i = new BufferedImage(c.getSize().width, c.getSize().height, BufferedImage.TYPE_INT_ARGB);
+				        Graphics g = i.getGraphics();
+				        c.paint(g);
+				        g.dispose();
+				        ImageIO.write(i, "png", f);
+				        
+				        new FileOutputStream(getFile("txt")).write(text.getText().getBytes());
+				        
+				        PrintWriter pw = new PrintWriter(getFile("vars.txt"));
+				        String nameVal = "%s = %s\n";
+				        pw.printf(nameVal, "seed", seed[0]);
+				        
+				        for (Map.Entry<String, Model> kv: engine[0].argValues())
+				            pw.printf(nameVal, kv.getKey(), kv.getValue().value());
+				        pw.close();
+				    }
+		        } catch(IOException ex) { throw new RuntimeException(ex); }
 			}
 		});
+		panel.add(fileName);
 		panel.add(saveButton);
 
 		panel.add(vars);
