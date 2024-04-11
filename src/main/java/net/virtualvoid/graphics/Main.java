@@ -62,10 +62,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.virtualvoid.graphics.Painter.IEngine;
-import scala.collection.immutable.List;
-import scala.collection.immutable.Nil$;
-import scala.tools.nsc.Interpreter;
+import scala.collection.immutable.List$;
 import scala.tools.nsc.Settings;
+import scala.tools.nsc.interpreter.IMain;
+import scala.tools.nsc.interpreter.shell.ReplReporterImpl;
 
 
 public class Main{
@@ -95,10 +95,10 @@ public class Main{
 
 		final Settings settings = new Settings();
 		settings.usejavacp().tryToSet(null);
-		final Interpreter interpreter = new Interpreter(settings);
+		final IMain interpreter = new IMain(settings, new ReplReporterImpl(settings));
 		final Painter[] painter = new Painter[1];
 
-		interpreter.bind("painter", "Array[net.virtualvoid.graphics.Painter]", painter, List.empty());
+		interpreter.bind("painter", "Array[net.virtualvoid.graphics.Painter]", painter, List$.MODULE$.empty());
 
 		final long []seed = new long[1];
 		final IEngine[] engine=new IEngine[1];
