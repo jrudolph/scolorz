@@ -1,35 +1,35 @@
-implicit def float2int(f:float):int = f.intValue
-implicit def double2float(d:double):float = d.floatValue
+implicit def Float2int(f:Float):Int = f.intValue
+implicit def double2Float(d:Double):Float = d.floatValue
 
-def choice[T](a:Array[T]):T = 
+def choice[T](a:Array[T]):T =
         a(random(0,a.length).floor)
 
-class Turtle (x0:float,y0:float){
+class Turtle (x0:Float,y0:Float){
         import java.awt._
         import java.awt.geom._
 
         var pos:Point = new Point(x0,y0);
-        var phi:float = 0;
+        var phi:Float = 0;
         var parent:Turtle = null
-        
+
         def this(p:Turtle) = {
                 this(p.pos.x,p.pos.y)
                 phi = p.phi
                 parent = p
         }
 
-        def advance(len:float) = 
+        def advance(len:Float) =
                 new Point(
                         pos.x + len * Math.cos(phi)
                         ,pos.y + len * Math.sin(phi))
-        def line(length:float):Unit = {
+        def line(length:Float) = {
                 val newPos = advance(length)
                 g2d.draw(new Line2D.Float(pos,newPos))
                 pos = newPos
                 this
         }
-        def rotate(grad:float) = {
-                phi = phi + 2*Math.Pi*grad/360
+        def rotate(grad:Float) = {
+                phi = phi + 2*Math.PI*grad/360
                 this
         }
 
@@ -37,7 +37,7 @@ class Turtle (x0:float,y0:float){
         def push:Turtle = new Turtle(this)
 }
 
-def baum(depth:int,length:float,t:Turtle):Unit = 
+def baum(depth:Int,length:Float,t:Turtle):Unit =
         if (depth > 0 ){
                 g2d.setStroke(new java.awt.BasicStroke(depth,1,1));
 
@@ -47,7 +47,7 @@ def baum(depth:int,length:float,t:Turtle):Unit =
                 val r = (10-depth).floatValue/10f*arg("winkel",0f,360f,70)
                 baum(depth-1,length * arg("krumm",0f,1f,0.9f),t.rotate(random(-r,r)).push)
                 baum(depth-1,length * arg("gerade",0f,1f,0.8f),t.push)
-        }        
+        }
 
 g2d.setPaint(new java.awt.RadialGradientPaint(width/2,height/2,width/2
         ,Array(0f,1f)
